@@ -1,0 +1,51 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /movie-seat-inventory-api
+logging:
+  file:
+    name: D:/Development/WS/log/local/movie-seat-inventory-api/movie-seat-inventory-api.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    org.example.movie.booking: INFO
+    org.springframework.web: TRACE
+axon:
+  axonserver:
+    client-id: movie-seat-inventory-api
+    servers: localhost:20007
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:20010
+    admin:
+      client-id: movie-seat-inventory-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/movie_seat_inventory?useSSL=false
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+
+kafka:
+  movieBookingApi:
+    groupName: movie-schedule
+    checkSeatInventory:
+      topic:
+        request: check-seat-inventory
+        serialization-class: org.example.movie.core.common.booking.BookingInformation
+    movieSchedule:
+      topic:
+        request-unique-id: movie-schedule-unique-id-request
+        response-unique-id: movie-schedule-unique-id-response
+        serialization-class: org.example.movie.core.common.schedule.MovieScheduleResponse
+    calculatePrice:
+      topic:
+        request: calculate-price
+
